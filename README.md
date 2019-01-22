@@ -1,5 +1,5 @@
-# Koa2 API Boilerplate (Typescript version)
-Boilerplate for Node.js Koa2 API application with Typescript, TSLint, ES2017, Yarn.
+# NTUT API Server
+An API server for a series of application of Taipei Tech that write by NTUT Programming Club.
 
 ## Requirements
 - Redis (installed & running)
