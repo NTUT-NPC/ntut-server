@@ -1,0 +1,35 @@
+{
+  "license": "MIT",
+  "scripts": {
+    "start": "tsc && node build/app.js",
+    "dev": "nodemon --watch 'src/**/*' -e ts,tsx --exec 'ts-node' ./src/app.ts",
+    "lint": "tslint --project .",
+    "lintfix": "tslint --project . --fix",
+    "test": "jest"
+  },
+  "dependencies": {
+    "ioredis": "^4.3.0",
+    "koa": "^2.6.2",
+    "koa-bodyparser": "^4.2.1",
+    "koa-compress": "^3.0.0",
+    "koa-helmet": "^4.0.0",
+    "koa-json": "^2.0.2",
+    "koa-logger": "^3.2.0",
+    "koa-onerror": "^4.1.0",
+    "koa-protect": "^1.0.1",
+    "koa-ratelimit": "^4.1.2",
+    "koa-response-time": "^2.1.0",
+    "koa-router": "^7.4.0",
+    "@types/node": "^10.12.18"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.9",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.12.1",
+    "@types/jest": "^23.3.12",
+    "jest": "^23.6.0",
+    "supertest": "^3.3.0",
+    "ts-jest": "^23.10.5",
+    "typescript": "^3.2.4"
+  }
+}
