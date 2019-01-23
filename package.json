@@ -20,7 +20,8 @@
     "koa-protect": "^1.0.1",
     "koa-ratelimit": "^4.1.2",
     "koa-response-time": "^2.1.0",
-    "koa-router": "^7.4.0"
+    "koa-router": "^7.4.0",
+    "lodash.includes": "^4.3.0"
   },
   "devDependencies": {
     "@types/jest": "^23.3.12",
