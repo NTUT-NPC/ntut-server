@@ -4,6 +4,7 @@ jobs:
   build:
     docker:
       - image: circleci/node:11.3.0
+      - image: redis
     steps:
       - checkout
       - restore_cache:
