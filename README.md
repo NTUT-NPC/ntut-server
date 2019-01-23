@@ -1,4 +1,6 @@
 # NTUT API Server
+[![CircleCI](https://circleci.com/gh/NTUT-NPC/ntut-server.svg?style=svg)](https://circleci.com/gh/NTUT-NPC/ntut-server)
+
 An API server for a series of application of Taipei Tech that write by NTUT Programming Club.
 
 ## Requirements
