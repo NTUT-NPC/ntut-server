@@ -2,7 +2,6 @@ import * as request from 'supertest'
 import server from '../src/app'
 
 console.log = jest.fn()
-jest.setTimeout(30000)
 
 afterAll(() => {
   server.close()
