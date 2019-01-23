@@ -18,4 +18,7 @@ $ yarn dev
 
 # run the test
 $ yarn test
+
+# run the application with docker
+$ docker-compose up
 ```
