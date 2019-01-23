@@ -26,19 +26,6 @@ if (reviewersCount === 0) {
 	)
 }
 
-/**
- * Rule: Ensure the PR title contains a Jira ticket key.
- * Reason: When looking at the list of PRs, seeing the Jira ticket in the PR
- *         title makes it very efficient to know what to look at.
- */
-const prTitle = danger.github.pr.title
-const ticketPattern = /CL-\d+/g
-if (!ticketPattern.test(prTitle)) {
-	fail(
-		`🔍 I can't find the Jira ticket number in the PR title. Your team members are going to thank you when they look at the list of PRs on Github and see at a glance which PR belongs to which Jira ticket 🙏.`
-	)
-}
-
 // Fails if the description is too short.
 if (!danger.github.pr.body || danger.github.pr.body.length < 10) {
 	fail(':grey_question: This pull request needs a description.')
