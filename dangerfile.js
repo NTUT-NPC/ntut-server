@@ -34,7 +34,7 @@ if (packageChanged) {
 	const title = ':lock: package.json'
 	const idea =
 		'Changes were made to package.json. ' +
-		'This will require a manual import by a Facebook employee.'
+		'This will require a manual import by a NPC member.'
 	warn(`${title} - <i>${idea}</i>`)
 }
 
