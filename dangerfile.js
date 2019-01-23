@@ -21,7 +21,7 @@ const includes = require('lodash.includes')
  */
 const reviewersCount = danger.github.requested_reviewers.users.length
 if (reviewersCount === 0) {
-	fail(`🕵 Whoops, I don't see any reviewers. Remember to add one.`)
+	warn(`🕵 Whoops, I don't see any reviewers. Remember to add one.`)
 } else if (reviewersCount > 1) {
 	warn(
 		`It's great to have ${reviewersCount} reviewers. Remember though that more than 1 reviewer may lead to uncertainty as to who is responsible for the review.`
@@ -34,7 +34,7 @@ if (packageChanged) {
 	const title = ':lock: package.json'
 	const idea =
 		'Changes were made to package.json. ' +
-		'This will require a manual import by a Facebook employee.'
+		'This will require a manual import by a NPC member.'
 	warn(`${title} - <i>${idea}</i>`)
 }
 
