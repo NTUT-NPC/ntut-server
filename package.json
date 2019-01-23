@@ -8,6 +8,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@types/node": "^10.12.18",
     "ioredis": "^4.3.0",
     "koa": "^2.6.2",
     "koa-bodyparser": "^4.2.1",
@@ -20,16 +21,17 @@
     "koa-ratelimit": "^4.1.2",
     "koa-response-time": "^2.1.0",
     "koa-router": "^7.4.0",
-    "@types/node": "^10.12.18"
+    "lodash.includes": "^4.3.0"
   },
   "devDependencies": {
-    "nodemon": "^1.18.9",
-    "ts-node": "^7.0.1",
-    "tslint": "^5.12.1",
     "@types/jest": "^23.3.12",
+    "danger": "^7.0.2",
     "jest": "^23.6.0",
+    "nodemon": "^1.18.9",
     "supertest": "^3.3.0",
     "ts-jest": "^23.10.5",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.12.1",
     "typescript": "^3.2.4"
   }
 }

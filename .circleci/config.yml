@@ -21,3 +21,6 @@ jobs:
       - run:
           name: Test
           command: yarn test
+      - run:    
+          name: Danger
+          command: yarn danger ci
