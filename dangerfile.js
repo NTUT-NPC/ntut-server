@@ -26,11 +26,6 @@ if (reviewersCount === 0) {
 	)
 }
 
-// Fails if the description is too short.
-if (!danger.github.pr.body || danger.github.pr.body.length < 10) {
-	fail(`:grey_question: This pull request needs a description.`)
-}
-
 // Warns if there are changes to package.json, and tags the team.
 const packageChanged = includes(danger.git.modified_files, 'package.json')
 if (packageChanged) {
@@ -60,6 +55,17 @@ if (danger.github.pr.additions + danger.github.pr.deletions > bigPRThreshold) {
 		danger.git.added_files +
 		danger.git.deleted_files} files.`
 	warn(`${title} - <i>${idea}</i>`)
+}
+
+// 10個以上のファイルを編集している場合、警告を出す
+if (danger.github.pr.changed_files > 10) {
+	warn(
+		'This PR changes too many files. You should divide this PR into smaller PRs.'
+	)
+}
+
+if (danger.github.body < 5) {
+	fail(`PlZ enter the description or goal for this PR`)
 }
 
 const modifiedMD = danger.git.modified_files.join('- ')
