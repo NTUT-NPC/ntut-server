@@ -5,7 +5,7 @@
     "dev": "nodemon --watch 'src/**/*' -e ts,tsx --exec 'ts-node' ./src/app.ts",
     "lint": "tslint --project .",
     "lintfix": "tslint --project . --fix",
-    "test": "jest"
+    "test": "jest --maxWorkers=4"
   },
   "dependencies": {
     "@types/node": "^10.12.18",
