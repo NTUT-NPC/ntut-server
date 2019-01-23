@@ -19,5 +19,5 @@ jobs:
           name: Lint
           command: yarn lint
       - run:
-        name: Danger
-        command: yarn danger ci
+          name: Danger
+          command: yarn danger ci
