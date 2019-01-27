@@ -11,6 +11,8 @@ import * as ratelimit from 'koa-ratelimit'
 import * as responseTime from 'koa-response-time'
 import apiRouter from './routers/index'
 
+import crawlerTest from './crawler/test'
+
 const app = new Koa()
 
 onerror(app)
@@ -56,3 +58,5 @@ app.use(apiRouter.routes())
 export default app.listen(process.env.PORT || 3000, () => {
     console.log(`Server running on http://localhost:${process.env.PORT || 3000}`)
 })
+
+crawlerTest()
