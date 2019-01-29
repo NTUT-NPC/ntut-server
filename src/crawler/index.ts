@@ -368,7 +368,7 @@ class Crawler {
       const studentsInfoTable = $(tables)[2]
       const rows = $(studentsInfoTable).find('tr')
       $(rows).each((rowIndex: number, row: CheerioElement) => {
-        if (rowIndex !== $(rows).length - 1) {
+        if (rowIndex !== 0 && rowIndex !== $(rows).length - 1) {
           const student: ICourseStudent = {
             class: '',
             courseStatus: '',
