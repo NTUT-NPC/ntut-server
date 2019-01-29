@@ -1,5 +1,5 @@
 // 入口網
-const Portal = (() => {
+const portal = (() => {
   // BASE
   const BASE = 'https://nportal.ntut.edu.tw/'
   // 登入頁面
@@ -15,7 +15,8 @@ const Portal = (() => {
   // 教務系統頁面
   const APTREE_AA_LIST_PAGE = APTREE_LIST_PAGE + '?apDn=ou=aa,ou=aproot,o=ldaproot'
   // SSO 登入課程系統
-  const SSO_LOGIN_COURSE = BASE + 'ssoIndex.do?apOu=aa_0010-&apUrl=https://aps.ntut.edu.tw/course/tw/courseSID.jsp'
+  const SSO_LOGIN_COURSE_SYSTEM = BASE
+    + 'ssoIndex.do?apOu=aa_0010-&apUrl=https://aps.ntut.edu.tw/course/tw/courseSID.jsp'
 
   return {
     APTREE_AA_LIST_PAGE,
@@ -24,11 +25,11 @@ const Portal = (() => {
     INDEX_PAGE,
     LOGIN,
     MAIN_PAGE,
-    SSO_LOGIN_COURSE,
+    SSO_LOGIN_COURSE_SYSTEM,
   }
 })()
 
-const Course = (() => {
+const courseSystem = (() => {
   // BASE
   const BASE = 'https://aps.ntut.edu.tw/course/tw/'
   // 主頁面
@@ -43,6 +44,6 @@ const Course = (() => {
 })()
 
 export default {
-  Course,
-  Portal,
+  courseSystem,
+  portal,
 }
