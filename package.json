@@ -12,7 +12,14 @@
     "@types/koa-bodyparser": "^4.2.1",
     "@types/koa-logger": "^3.1.1",
     "@types/koa-router": "^7.0.39",
+    "@types/cheerio": "^0.22.10",
+    "@types/iconv-lite": "^0.0.1",
     "@types/node": "^10.12.18",
+    "@types/pngjs": "^3.3.2",
+    "@types/request": "^2.48.1",
+    "@types/request-promise-native": "^1.0.15",
+    "cheerio": "^1.0.0-rc.2",
+    "iconv-lite": "^0.4.24",
     "ioredis": "^4.3.0",
     "jsonwebtoken": "^8.4.0",
     "koa": "^2.6.2",
@@ -27,7 +34,10 @@
     "koa-ratelimit": "^4.1.2",
     "koa-response-time": "^2.1.0",
     "koa-router": "^7.4.0",
-    "lodash.includes": "^4.3.0"
+    "lodash.includes": "^4.3.0",
+    "pngjs": "^3.3.3",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.5"
   },
   "devDependencies": {
     "@types/jest": "^23.3.12",
