@@ -18,7 +18,18 @@ interface IResult {
 }
 
 class Crawler {
+  public static getInstance(): Crawler {
+    if (!Crawler.instance) {
+      Crawler.instance = new Crawler()
+    }
+    return Crawler.instance
+  }
+
+  private static instance: Crawler = null
   private cookieJar: rq.CookieJar | undefined = undefined
+
+  private constructor() {
+  }
 
   public async getCurriculums(
     options: { studentId: string, password: string, targetStudentId?: string }): Promise<IResult> {
