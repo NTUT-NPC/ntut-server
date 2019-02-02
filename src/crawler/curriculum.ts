@@ -43,8 +43,9 @@ export interface ICourse {
 
 class Curriculum {
     public static async getCurriculums(cookieJar: rq.CookieJar,
-                                       options: { studentId: string }): Promise<ICurriculum[]> {
-        const body = await request({
+                                       options: { studentId: string }): Promise<ICurriculum[] | undefined> {
+        const buffer: Buffer = await request({
+            encoding: null,
             form: {
                 code: options.studentId,
                 format: -3,
@@ -53,6 +54,12 @@ class Curriculum {
             method: 'POST',
             uri: url.courseSystem.SELECT,
         })
+        const body: string = iconv.decode(buffer, 'big5')
+
+        if (body.indexOf('查無該學號的學生基本資料') !== -1) {
+            return undefined
+        }
+
         const $: CheerioStatic = cheerio.load(body)
         const links: Cheerio = $('a')
         const curriculums: ICurriculum[] = []
@@ -137,7 +144,7 @@ class Curriculum {
         return curriculumCourses
     }
 
-    public static async getCourse(cookieJar: rq.CookieJar, options: { id: string }): Promise<ICourse> {
+    public static async getCourse(cookieJar: rq.CookieJar, options: { id: string }): Promise<ICourse | undefined> {
         const course: ICourse = {
             class: '',
             classroom: [],
@@ -157,6 +164,11 @@ class Curriculum {
             uri: `${url.courseSystem.SELECT}?format=-1&code=${options.id}`,
         })
         const body: string = iconv.decode(buffer, 'big5')
+
+        if (body.indexOf('查無該課號的開課資料') !== -1) {
+            return undefined
+        }
+
         const $: CheerioStatic = cheerio.load(body, { decodeEntities: false })
         const tables: Cheerio = $('table')
         {
