@@ -14,6 +14,7 @@ interface IData {
 
 interface IResult {
   success: boolean,
+  status: number,
   data: any
 }
 
@@ -33,62 +34,53 @@ class Crawler {
 
   public async getCurriculums(
     options: { studentId: string, password: string, targetStudentId?: string }): Promise<IResult> {
-    this.resetCookieJar()
-    if (await this.loginPortal({
-      password: options.password,
-      studentId: options.studentId,
-    })) {
-      // console.log('登入入口網站成功')
-    } else {
-      // console.log('登入入口網站失敗')
-      return {
-        data: '登入入口網站失敗',
-        success: false,
-      }
+    const resultOfLoginCourse: IResult = await this._loginCourseSystem(options)
+    if (!resultOfLoginCourse.success) {
+      return resultOfLoginCourse
     }
 
-    if (await this._loginCourseSystem()) {
-      // console.log('登入課程系統成功')
-    } else {
-      // console.log('登入課程系統失敗')
-      return {
-        data: '登入課程系統失敗',
-        success: false,
-      }
-    }
-
-    const data: ICurriculum[] = await Curriculum.getCurriculums(this.cookieJar,
+    const data: ICurriculum[] | undefined = await Curriculum.getCurriculums(this.cookieJar,
       { studentId: options.targetStudentId || options.studentId })
 
-    return {
-      data,
-      success: true,
+    if (data) {
+      return {
+        data,
+        status: 200,
+        success: true,
+      }
+    } else {
+      return {
+        data: '查無該學號的學生',
+        status: 400,
+        success: false,
+      }
     }
   }
 
   public async getCurriculumCourses(
     options: { studentId: string, password: string, targetStudentId?: string, year: string, sem: string })
     : Promise<IResult> {
-    this.resetCookieJar()
-    if (await this.loginPortal({
-      password: options.password,
-      studentId: options.studentId,
-    })) {
-      // console.log('登入入口網站成功')
-    } else {
-      // console.log('登入入口網站失敗')
-      return {
-        data: '登入入口網站失敗',
-        success: false,
+    const resultOfLoginCourse: IResult = await this._loginCourseSystem(options)
+    if (!resultOfLoginCourse.success) {
+      return resultOfLoginCourse
+    }
+
+    const curriculums: ICurriculum[] = await Curriculum.getCurriculums(this.cookieJar, {
+      studentId: options.targetStudentId || options.studentId,
+    })
+
+    let flag = false
+    for (const curriculum of curriculums) {
+      if (curriculum.year === options.year && curriculum.sem === options.sem) {
+        flag = true
+        break
       }
     }
 
-    if (await this._loginCourseSystem()) {
-      // console.log('登入課程系統成功')
-    } else {
-      // console.log('登入課程系統失敗')
+    if (!flag) {
       return {
-        data: '登入課程系統失敗',
+        data: '查無該學年或學期課表資料',
+        status: 400,
         success: false,
       }
     }
@@ -101,45 +93,37 @@ class Crawler {
 
     return {
       data,
+      status: 200,
       success: true,
     }
   }
 
   public async getCourse(
     options: { studentId: string, password: string, courseId: string }): Promise<IResult> {
-    this.resetCookieJar()
-    if (await this.loginPortal({
-      password: options.password,
-      studentId: options.studentId,
-    })) {
-      // console.log('登入入口網站成功')
-    } else {
-      // console.log('登入入口網站失敗')
-      return {
-        data: '登入入口網站失敗',
-        success: false,
-      }
+    const resultOfLoginCourse: IResult = await this._loginCourseSystem(options)
+    if (!resultOfLoginCourse.success) {
+      return resultOfLoginCourse
     }
 
-    if (await this._loginCourseSystem()) {
-      // console.log('登入課程系統成功')
-    } else {
-      // console.log('登入課程系統失敗')
+    const data: ICourse | undefined = await Curriculum.getCourse(this.cookieJar, { id: options.courseId })
+
+    if (data) {
       return {
-        data: '登入課程系統失敗',
+        data,
+        status: 200,
+        success: true,
+      }
+    } else {
+      return {
+        data: '查無該課號的課程',
+        status: 400,
         success: false,
       }
-    }
-
-    const data: ICourse = await Curriculum.getCourse(this.cookieJar, { id: options.courseId })
-
-    return {
-      data,
-      success: true,
     }
   }
 
-  public async loginPortal(options: { studentId: string, password: string }): Promise<boolean> {
+  public async loginPortal(options: { studentId: string, password: string }): Promise<IResult> {
+    this.resetCookieJar()
     const authcode: string = getAuthCode(await this._getAuthcodeImageBuffer())
     const body: string = await request({
       form: {
@@ -155,7 +139,19 @@ class Crawler {
       method: 'POST',
       uri: url.portal.LOGIN,
     })
-    return body.indexOf('重新登入') === -1
+    if (body.indexOf('重新登入') === -1) {
+      return {
+        data: '',
+        status: 200,
+        success: true,
+      }
+    } else {
+      return {
+        data: '登入入口網站失敗',
+        status: 401,
+        success: false,
+      }
+    }
   }
 
   public resetCookieJar(stringCookieJar?: string) {
@@ -172,7 +168,11 @@ class Crawler {
     return buffer
   }
 
-  private async _loginCourseSystem(): Promise<boolean> {
+  private async _loginCourseSystem(options: { studentId: string, password: string }): Promise<IResult> {
+    const resultOfLoginPortal: IResult = await this.loginPortal(options)
+    if (!resultOfLoginPortal.success) {
+      return resultOfLoginPortal
+    }
     let body: string = await request({
       jar: this.cookieJar,
       method: 'POST',
@@ -192,7 +192,19 @@ class Crawler {
       uri: url.courseSystem.MAIN_PAGE,
     })
     body = iconv.decode(buffer, 'big5')
-    return body.indexOf('依 [學號]／[課號] 查詢選課表') !== -1
+    if (body.indexOf('依 [學號]／[課號] 查詢選課表') !== -1) {
+      return {
+        data: '登入課程系統成功',
+        status: 200,
+        success: true,
+      }
+    } else {
+      return {
+        data: '登入課程系統失敗',
+        status: 401,
+        success: false,
+      }
+    }
   }
 }
 
