@@ -33,8 +33,8 @@ class Crawler {
 
   public async getCurriculums(
     options: { studentId: string, password: string, targetStudentId?: string }): Promise<IResult> {
-    this._resetCookieJar()
-    if (await this._loginPortal({
+    this.resetCookieJar()
+    if (await this.loginPortal({
       password: options.password,
       studentId: options.studentId,
     })) {
@@ -69,8 +69,8 @@ class Crawler {
   public async getCurriculumCourses(
     options: { studentId: string, password: string, targetStudentId?: string, year: string, sem: string })
     : Promise<IResult> {
-    this._resetCookieJar()
-    if (await this._loginPortal({
+    this.resetCookieJar()
+    if (await this.loginPortal({
       password: options.password,
       studentId: options.studentId,
     })) {
@@ -107,8 +107,8 @@ class Crawler {
 
   public async getCourse(
     options: { studentId: string, password: string, courseId: string }): Promise<IResult> {
-    this._resetCookieJar()
-    if (await this._loginPortal({
+    this.resetCookieJar()
+    if (await this.loginPortal({
       password: options.password,
       studentId: options.studentId,
     })) {
@@ -139,21 +139,7 @@ class Crawler {
     }
   }
 
-  private _resetCookieJar(stringCookieJar?: string) {
-    this.cookieJar = stringCookieJar ? JSON.parse(stringCookieJar) as rq.CookieJar : request.jar()
-  }
-
-  private async _getAuthcodeImageBuffer(): Promise<Buffer> {
-    const buffer: Buffer = await request({
-      encoding: null,
-      jar: this.cookieJar,
-      method: 'GET',
-      uri: url.portal.AUTH_IMAGE,
-    })
-    return buffer
-  }
-
-  private async _loginPortal(options: { studentId: string, password: string }): Promise<boolean> {
+  public async loginPortal(options: { studentId: string, password: string }): Promise<boolean> {
     const authcode: string = getAuthCode(await this._getAuthcodeImageBuffer())
     const body: string = await request({
       form: {
@@ -170,6 +156,20 @@ class Crawler {
       uri: url.portal.LOGIN,
     })
     return body.indexOf('重新登入') === -1
+  }
+
+  public resetCookieJar(stringCookieJar?: string) {
+    this.cookieJar = stringCookieJar ? JSON.parse(stringCookieJar) as rq.CookieJar : request.jar()
+  }
+
+  private async _getAuthcodeImageBuffer(): Promise<Buffer> {
+    const buffer: Buffer = await request({
+      encoding: null,
+      jar: this.cookieJar,
+      method: 'GET',
+      uri: url.portal.AUTH_IMAGE,
+    })
+    return buffer
   }
 
   private async _loginCourseSystem(): Promise<boolean> {
