@@ -14,9 +14,7 @@ export interface ICurriculumCourse {
     id: string,
     name: string,
     instructor: string[],
-    periods: {
-        [day: number]: string[],
-    },
+    periods: string[][],
     classroom: string[]
 }
 
@@ -121,7 +119,7 @@ class Curriculum {
                     id: '',
                     instructor: [],
                     name: '',
-                    periods: {},
+                    periods: [],
                 }
                 $(columns).each((columnIndex: number, column: CheerioElement) => {
                     if (columnMap[columnIndex]) {
