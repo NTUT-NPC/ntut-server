@@ -1,8 +1,8 @@
 import * as request from 'supertest'
 import server from '../src/app'
 
-const studentId = '105590010'
-const password = 'xxxxxxxx'
+const studentId = 'xxxxxxx'
+const password = 'xxxxxxx'
 
 afterAll(() => {
   server.close()
