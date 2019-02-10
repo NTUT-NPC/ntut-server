@@ -10,6 +10,13 @@ export interface ICurriculum {
     sem: string
 }
 
+export interface ICurriculumInfo {
+    hasNoPeriodsCourses: boolean,
+    hasSaturdayCourses: boolean,
+    hasSundayCourses: boolean,
+    courses: ICurriculumCourse[]
+}
+
 export interface ICurriculumCourse {
     id: string,
     name: string,
@@ -79,12 +86,12 @@ class Curriculum {
         return curriculums
     }
 
-    public static async getCurriculumCourses(cookieJar: rq.CookieJar,
-                                             options: {
+    public static async getCurriculumInfo(cookieJar: rq.CookieJar,
+                                          options: {
             studentId: string,
             year: string,
             sem: string,
-        }): Promise<ICurriculumCourse[]> {
+        }): Promise<ICurriculumInfo> {
         const buffer: Buffer = await request({
             encoding: null,
             jar: cookieJar,
@@ -97,7 +104,7 @@ class Curriculum {
         const body: string = iconv.decode(buffer, 'big5')
         const $ = cheerio.load(body, { decodeEntities: false })
         const rows = $('tr')
-        const curriculumCourses: ICurriculumCourse[] = []
+        const courses: ICurriculumCourse[] = []
         const columnMap: { [key: number]: string } = {
             0: 'id',
             1: 'name',
@@ -111,6 +118,9 @@ class Curriculum {
             14: 'periodsOfSaturday',
             15: 'classroom',
         }
+        let hasNoPeriodsCourses: boolean = false
+        let hasSaturdayCourses: boolean = false
+        let hasSundayCourses: boolean = false
         $(rows).each((rowIndex: number, row: CheerioElement) => {
             if ([0, 1, 2, $(rows).length - 1].indexOf(rowIndex) === -1) {
                 const columns = $(row).find('td')
@@ -126,7 +136,15 @@ class Curriculum {
                         const element: Cheerio = $(column).find('a').length === 0 ? $(column) : $(column).find('a')
                         if (columnIndex >= 8 && columnIndex <= 14) {
                             const day: number = columnIndex - 8
-                            info.periods[day] = $(element).text().trim().split(' ')
+                            info.periods[day] = $(element).text().trim().split(' ').filter((value) => {
+                                return !!value
+                            })
+                            if (!hasSaturdayCourses && day === 6 && info.periods[day].length !== 0) {
+                                hasSaturdayCourses = true
+                            }
+                            if (!hasSundayCourses && day === 0 && info.periods[day].length !== 0) {
+                                hasSundayCourses = true
+                            }
                         } else if (columnIndex === 6 || columnIndex === 15) {
                             $(element).each((i: number, el: CheerioElement) => {
                                 info[columnMap[columnIndex]].push($(el).text().trim())
@@ -136,10 +154,25 @@ class Curriculum {
                         }
                     }
                 })
-                curriculumCourses.push(info)
+                courses.push(info)
+                if (!hasNoPeriodsCourses) {
+                    let temp: boolean = true
+                    for (const p of info.periods) {
+                        if (p.length !== 0) {
+                            temp = false
+                            break
+                        }
+                    }
+                    hasNoPeriodsCourses = temp
+                }
             }
         })
-        return curriculumCourses
+        return {
+            courses,
+            hasNoPeriodsCourses,
+            hasSaturdayCourses,
+            hasSundayCourses,
+        }
     }
 
     public static async getCourse(cookieJar: rq.CookieJar, options: { id: string }): Promise<ICourse | undefined> {
