@@ -6,7 +6,7 @@ import * as request from 'request-promise-native'
 import getAuthCode from './authcode'
 import url from './url'
 
-import Curriculum, { ICourse, ICourseStudent, ICurriculum, ICurriculumCourse } from './curriculum'
+import Curriculum, { ICourse, ICourseStudent, ICurriculum, ICurriculumCourse, ICurriculumInfo } from './curriculum'
 
 interface IData {
   [key: string]: any
@@ -85,7 +85,7 @@ class Crawler {
       }
     }
 
-    const data: ICurriculumCourse[] = await Curriculum.getCurriculumCourses(this.cookieJar, {
+    const data: ICurriculumInfo = await Curriculum.getCurriculumInfo(this.cookieJar, {
       sem: options.sem,
       studentId: options.targetStudentId || options.studentId,
       year: options.year,
