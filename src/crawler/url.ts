@@ -1,7 +1,7 @@
 // 入口網
 const portal = (() => {
   // BASE
-  const BASE = 'https://nportal.ntut.edu.tw/'
+  const BASE = 'https://app.ntut.edu.tw/'
   // 登入頁面
   const INDEX_PAGE = BASE + 'index.do'
   // 登入驗證碼圖片
