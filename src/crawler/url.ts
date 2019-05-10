@@ -4,8 +4,6 @@ const portal = (() => {
   const BASE = 'https://app.ntut.edu.tw/'
   // 登入頁面
   const INDEX_PAGE = BASE + 'index.do'
-  // 登入驗證碼圖片
-  const AUTH_IMAGE = BASE + 'authImage.do'
   // 登入
   const LOGIN = BASE + 'login.do'
   // 主頁面
@@ -21,7 +19,6 @@ const portal = (() => {
   return {
     APTREE_AA_LIST_PAGE,
     APTREE_LIST_PAGE,
-    AUTH_IMAGE,
     INDEX_PAGE,
     LOGIN,
     MAIN_PAGE,
